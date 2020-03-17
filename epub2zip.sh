@@ -10,7 +10,7 @@ for file in $(find . -name "*.epub"); do
     tmpPath=./${filename}
     # echo ${tmpPath}
 
-    zipPath=${tmpPath}
+    zipPath=${tmpPath}.tempzip
     # echo ${zipPath}
 
     if [ ! -f "${tmpPath}" ]; then
@@ -32,13 +32,15 @@ for file in $(find . -name "*.epub"); do
 
         oldImgPath=${tmpPath}/${IMGURL#../}
         newImgPath=${zipPath}/${index}.jpg
-        cp ${oldImgPath} ${newImgPath}
+        mv ${oldImgPath} ${newImgPath}
 
         index=$(($index + 1))
     done
 
-    zip -rq ${filename}.zip ${zipPath}/
-
+    cd ${zipPath}
+    zip -q ../${filename}.zip *
+    cd ..
+    
     rm -rf ${tmpPath}
     rm -rf ${zipPath}
 
